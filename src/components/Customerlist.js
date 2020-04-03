@@ -6,6 +6,8 @@ import 'react-table/react-table.css';
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import Addcustomer from './Addcustomer';
+import Editcustomer from './Editcustomer';
+import Addtraining from './Addtraining';
 
 
 
@@ -42,6 +44,33 @@ export default function Customerlist() {
         .catch(err => console.error(err))
     }
 
+    const updateCustomer = (customer, link) => {
+        fetch(link, {
+            method: 'PUT',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(customer)
+        })
+        .then(res => fetchData())
+        .catch(err => console.error(err))
+    }
+
+    const addTraining = (training) => {
+        console.log(training);
+        
+        fetch('https://customerrest.herokuapp.com/api/trainings', {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(training)
+        })
+        .then(res => fetchData())
+        .catch(err => console.error(err))
+    }
+
+    
     const [open, setOpen] = React.useState(false); //snackbar
 
     const handleClick = () => {
@@ -88,12 +117,26 @@ export default function Customerlist() {
         {
             sortable: false,
             filterable: false,
-            width: 100,
+            width: 60,
+            Cell: row => <Editcustomer updateCustomer={updateCustomer} customer={row.original} />
+           
+        },
+        {
+            sortable: false,
+            filterable: false,
+            width: 60,
             accessor: 'links[0].href',
             Cell: row => 
             <IconButton aria-label="delete" onClick={() => deleteCustomer(row.value)}>
             <DeleteIcon color="secondary" />
             </IconButton>
+        },
+        {
+            sortable: false,
+            filterable: false,
+            width: 120,
+            Cell: row => <Addtraining customer={row.original} addTraining={addTraining} />
+           
         }
 
     ]

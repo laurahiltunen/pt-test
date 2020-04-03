@@ -3,14 +3,14 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import Moment from 'moment';
+import moment from 'moment';
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 
 
 
 export default function Traininglist() {
-    const [trainings, setTrainings] = useState([]);
+    const [training, setTrainings] = useState([]);
 
     useEffect(()=> fetchData(), []);
 
@@ -47,7 +47,8 @@ export default function Traininglist() {
     const columns = [
         {
             Header: 'Aika',
-            accessor: 'date'
+            accessor: 'date',
+            Cell: row => (moment(row.value).format('MM/DD/YYYY'))
         },
         {
             Header: 'Treeni',
@@ -80,7 +81,7 @@ export default function Traininglist() {
 
     return (
         <div>
-            <ReactTable filterable={true} data={trainings} columns={columns}/>
+            <ReactTable filterable={true} data={training} columns={columns}/>
         
             <Snackbar
             anchorOrigin={{
